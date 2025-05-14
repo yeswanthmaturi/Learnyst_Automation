@@ -1,0 +1,39 @@
+I am selling courses in Learnyst, but for everytime i have to give access, ia m opening my laptop and giving access, so i want to setup a telegram bot which is added to my personal group, such that if i give commands to that bot in my telegram group tagging the bot, it should go to (https://techpathai.learnyst.com/) and give access to courses in learnyst. So i want this automation.
+
+courses(product) we offer: 
+1. Meta Interview Advance Concepts
+2. Full Stack 1
+3. Full Stack 2
+4. Full Stack 3
+5. Full Stack 4
+6. Full Stack 5
+
+
+workflow:
+login with my admin credentials which are 
+website: https://techpathai.learnyst.com/
+username: techpath.mocks@gmail.com
+password: Techpathai
+
+and click users tab and click learners tab   (we can see the list of learners all there)
+
+and the commands should be like 
+
+use case 1 command: -for example:-   {@LearnystBot {Learner emailid} access fs2}    ( if that user is already enrolled with that email), 
+Workflow: In the dashboard after loggedin, click users tab and click learners tab, it should go and click the learner with that email and click add product at top right, click the  select product dropdown, in the dropdown list it should go and select "Full Stack 2" because we have given the command like fs2 , and open the type dropdown and should click "trail" and click save&next, and select the base plan, and click add offline payment button, and it should pop up with some extra details, there, we should give the plan validity for 2 months from todays date, and should hit save, after that we have given the fs2 course access succesfully.- and the bot should reply with succesfully given access to the user(try to give the better confirmation message handling according to the command)
+
+and the commands should be vice versa for all other users and courses.
+
+ use case 2 command: (if the user is not yet enrolled and still if we given the command like this to the bot) {@LearnystBot {Learner emailid} {Learner Full Name} access fs1} or {@LearnystBot {Learner emailid} {Learner Full Name} enroll fs1} - and if the command has given Without the full name , and the learner email id is not there in learners tab - the bot should return with the message asking for full name and should implement the workflow
+Workflow: In the dashboard after loggedin, click users tab and click learners tab, it should go and click the button (+add) at top right (which will add the learner) and click the Learner Emailid and should fill with the email id from which we have provided in the command, and click the Leaner Full name and should fill the name from which we have given in the response, and click on product and select the product(which is our course) from the dropdown menu, click the "Full Stack 1" in the dropdown list it should go and select "Full Stack 1" because we have given the command like fs2 , and open the Access type dropdown and should click "trail" and click save&next , and for the expiry date at the same menu, we should give the plan validity for 2 months from todays date, and should hit "Add New Learner", after that we have given the fs1 course access and enrollment succesfully.
+and for validation the telegram bot should return with Valid success message according to the command.
+
+And the commands should be viceversa for all the courses, we are enrolling with.
+
+use case 3 command: @LearnystBot {Learner emailid} or {Learner Full Name} Suspend
+workflow: In the dashboard after loggedin, click users tab and click learners tab, it should go and click the learner with that email or Full name in the command,  and click more button (right before the add product button) and should click settings in it, and should hit the "Suspend Learner Account " Tab (at the left side of the screen) and select the suspend button in the screen, and confirm the suspension by hitting the suspend button at bottom of the screen. And we succesfully suspended the learner. and after susscessfull suspension, a validation message should return to the user according to the command.
+
+and the commands should be vice versa for all other users
+
+use case 4 command: @LearnystBot {Learner emailid} or {Learner Full Name} Delete
+workflow: In the dashboard after loggedin, click users tab and click learners tab, it should go and click the learner with that email or Full name in the command,  and click more button (right before the add product button) and should click settings in it, and should hit the "Delete Learner Account" tab (at the left side of the screen) and should hit "Delete" button at the buttom of the screen.  And we succesfully Deleted the learner. and after susscessfull deletion, a validation message should return to the user according to the command.

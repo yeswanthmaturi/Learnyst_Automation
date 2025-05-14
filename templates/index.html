@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="fas fa-tachometer-alt me-2"></i>Bot Dashboard</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6><i class="fas fa-info-circle me-2"></i>Bot Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div id="status-indicator" class="status-indicator 
+                                        {% if status == 'Active' %}status-active
+                                        {% elif status == 'Inactive' %}status-inactive
+                                        {% elif status == 'Error' %}status-error
+                                        {% else %}status-pending{% endif %}">
+                                    </div>
+                                    <h4 id="status-text" class="ms-3">{{ status }}</h4>
+                                </div>
+                                <div class="mt-3">
+                                    <button id="start-bot" class="btn btn-success" {% if status == 'Active' %}disabled{% endif %}>
+                                        <i class="fas fa-play me-2"></i>Start Bot
+                                    </button>
+                                    <button id="stop-bot" class="btn btn-danger" {% if status != 'Active' %}disabled{% endif %}>
+                                        <i class="fas fa-stop me-2"></i>Stop Bot
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-book me-2"></i>Command Reference</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <h6><i class="fas fa-user-plus me-2"></i>Give Access to Existing User</h6>
+                                        <code>@LearnystBot [email] access [course_code]</code>
+                                        <small class="d-block text-muted">Example: @LearnystBot user@example.com access fs1</small>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <h6><i class="fas fa-user-plus me-2"></i>Enroll New User</h6>
+                                        <code>@LearnystBot [email] [full_name] enroll [course_code]</code>
+                                        <small class="d-block text-muted">Example: @LearnystBot user@example.com John Doe enroll fs2</small>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <h6><i class="fas fa-user-lock me-2"></i>Suspend User</h6>
+                                        <code>@LearnystBot [email] suspend</code>
+                                        <small class="d-block text-muted">Example: @LearnystBot user@example.com suspend</small>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <h6><i class="fas fa-user-times me-2"></i>Delete User</h6>
+                                        <code>@LearnystBot [email] delete</code>
+                                        <small class="d-block text-muted">Example: @LearnystBot user@example.com delete</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h6>Available Course Codes:</h6>
+                                    <span class="badge bg-primary me-1">fs1</span>
+                                    <span class="badge bg-primary me-1">fs2</span>
+                                    <span class="badge bg-primary me-1">fs3</span>
+                                    <span class="badge bg-primary me-1">fs4</span>
+                                    <span class="badge bg-primary me-1">fs5</span>
+                                    <span class="badge bg-primary">meta</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-list me-2"></i>Activity Log</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="log-container" class="log-container">
+                                    {% if logs %}
+                                        {% for log in logs %}
+                                            <div class="log-entry">{{ log }}</div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="text-center text-muted">No activity logged yet</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Start bot button handler
+        $('#start-bot').click(function() {
+            $.post('/api/start_bot', function(data) {
+                alert(data.status);
+                location.reload();
+            });
+        });
+        
+        // Stop bot button handler
+        $('#stop-bot').click(function() {
+            $.post('/api/stop_bot', function(data) {
+                alert(data.status);
+                location.reload();
+            });
+        });
+        
+        // Auto-refresh status every 10 seconds
+        setInterval(function() {
+            $.get('/api/status', function(data) {
+                $('#status-text').text(data.status);
+                
+                // Update status indicator class
+                $('#status-indicator').removeClass('status-active status-inactive status-error status-pending');
+                if (data.status === 'Active') {
+                    $('#status-indicator').addClass('status-active');
+                    $('#start-bot').prop('disabled', true);
+                    $('#stop-bot').prop('disabled', false);
+                } else if (data.status === 'Inactive') {
+                    $('#status-indicator').addClass('status-inactive');
+                    $('#start-bot').prop('disabled', false);
+                    $('#stop-bot').prop('disabled', true);
+                } else if (data.status === 'Error') {
+                    $('#status-indicator').addClass('status-error');
+                    $('#start-bot').prop('disabled', false);
+                    $('#stop-bot').prop('disabled', true);
+                } else {
+                    $('#status-indicator').addClass('status-pending');
+                }
+                
+                // Update logs
+                var logHtml = '';
+                if (data.logs && data.logs.length > 0) {
+                    data.logs.forEach(function(log) {
+                        logHtml += '<div class="log-entry">' + log + '</div>';
+                    });
+                } else {
+                    logHtml = '<div class="text-center text-muted">No activity logged yet</div>';
+                }
+                $('#log-container').html(logHtml);
+                
+                // Scroll to bottom of log container
+                var logContainer = document.getElementById('log-container');
+                logContainer.scrollTop = logContainer.scrollHeight;
+            });
+        }, 10000);
+        
+        // Scroll to bottom of log container on initial load
+        var logContainer = document.getElementById('log-container');
+        logContainer.scrollTop = logContainer.scrollHeight;
+    });
+</script>
+{% endblock %}

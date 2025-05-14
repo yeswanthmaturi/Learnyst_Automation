@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  learnyst-automation:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    environment:
+      - API_KEY=learnyst-access-key-2025
+      - PORT=5500
+      - HOST=10.0.0.77
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
