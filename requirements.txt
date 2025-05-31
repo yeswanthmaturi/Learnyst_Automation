@@ -1,0 +1,10 @@
+browser-use==0.1.48
+langchain-anthropic
+langchain-openai
+python-dotenv==1.0.1
+requests==2.32.3
+python-telegram-bot==21.0
+playwright-stealth==1.0.6
+langchain-google-genai
+langchain-core==0.3.49
+playwright==1.52.0

@@ -28,7 +28,7 @@ This external service uses Playwright to perform browser automation tasks on the
 
 ```
 API_KEY=your-secret-api-key
-PORT=5500
+PORT=5001
 HOST=0.0.0.0
 ```
 
@@ -177,7 +177,7 @@ cd <repository-directory>
 
 # Create .env file
 echo "API_KEY=your-secret-api-key" > .env
-echo "PORT=5500" >> .env
+echo "PORT=5001" >> .env
 echo "HOST=0.0.0.0" >> .env
 
 # Run the service

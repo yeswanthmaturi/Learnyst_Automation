@@ -5,16 +5,20 @@ from bot import start_bot, stop_bot
 import threading
 from config import BOT_STATUS, LOG_MESSAGES
 import config
+from dotenv import load_dotenv
+from browser_agent_runner import run_browser_agent
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG,
                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+load_dotenv()
+
 app = Flask(__name__, 
             static_folder='static',
             static_url_path='/static')
-app.secret_key = os.environ.get("SESSION_SECRET", "telegram-learnyst-bot-secret")
+app.secret_key = os.getenv('SESSION_SECRET', 'dev')
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/')
@@ -25,11 +29,11 @@ def index():
                           logs=LOG_MESSAGES)
 
 @app.route('/api/status')
-def get_status():
-    """Return the current bot status and logs."""
+def status():
+    """Get the current status of the bot."""
     return jsonify({
-        'status': BOT_STATUS.get('status', 'Inactive'),
-        'logs': LOG_MESSAGES
+        'status': 'healthy',
+        'bot_status': BOT_STATUS.get('status', 'Inactive')
     })
 
 @app.route('/api/start_bot', methods=['POST'])
@@ -76,6 +80,21 @@ def dashboard():
 def serve_css(filename):
     """Serve CSS files directly."""
     return app.send_static_file(f'css/{filename}')
+
+@app.route('/api/test_browser_use', methods=['POST'])
+def test_browser_use():
+    """Test endpoint for browser-use automation."""
+    data = request.json
+    prompt = data.get('prompt')
+    
+    if not prompt:
+        return jsonify({'error': 'No prompt specified'}), 400
+        
+    try:
+        result = run_browser_agent(prompt)
+        return jsonify({'result': result})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 def start_flask():
     """Start the Flask server."""

@@ -22,7 +22,7 @@ RUN python3 -m playwright install --with-deps chromium
 COPY . .
 
 # Expose port
-EXPOSE 5500
+EXPOSE 5001
 
 # Run the application
 CMD ["python3", "server.py"]
