@@ -15,7 +15,7 @@ echo Starting Docker services...
 docker-compose up -d
 
 echo.
-echo Setup complete! The external service is running at http://10.0.0.77:5500
+echo Setup complete! The external service is running at http://10.0.0.77:5001
 echo.
 echo You can check the logs with: docker-compose logs -f
 echo.

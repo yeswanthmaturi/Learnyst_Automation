@@ -222,7 +222,7 @@ def async_route(route_function):
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5500))
+    port = int(os.environ.get("PORT", 5001))
     host = os.environ.get("HOST", "0.0.0.0")
     
     logger.info(f"Starting Learnyst automation service on {host}:{port}")

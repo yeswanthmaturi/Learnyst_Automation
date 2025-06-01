@@ -3,6 +3,7 @@ import asyncio
 import logging
 from datetime import datetime, timedelta
 from playwright.async_api import async_playwright, TimeoutError
+import secrets
 
 # Configure logging
 logging.basicConfig(level=logging.INFO,
@@ -389,3 +390,5 @@ class LearnystAutomation:
         except Exception as e:
             logger.error(f"Error closing browser: {str(e)}")
             return False
+
+print(secrets.token_hex(32))
