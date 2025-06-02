@@ -51,7 +51,7 @@ markdownify==1.1.0
 MarkupSafe==3.0.2
 mem0ai==0.1.93
 monotonic==1.6
-numpy==2.2.6
+numpy==1.25.0
 ollama==0.4.8
 openai==1.82.0
 orjson==3.10.18
